@@ -3,3 +3,4 @@
 *.txt
 node_modules
 heartbeats.json
+session_logs.txt

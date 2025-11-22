@@ -7,7 +7,7 @@ const res = fetch("https://hackatime.hackclub.com/api/admin/v1/execute", {
   },
   // IF U HAVE MORE THEN 9999 WHY
   body: JSON.stringify({
-    query: `select raw_data from heartbeats where user_id = 41 AND project = 'explorpheus' LIMIT 99999;`,
+    query: `select raw_data from heartbeats where user_id = 3643 AND project = 'spicchi pizza' LIMIT 99999;`,
   }),
 })
   .then((r) => r.json())

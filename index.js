@@ -56,20 +56,20 @@ const ACTIVE_THRESHOLD = 120; // seconds
     grandTotalSeconds += totalSeconds;
     const hours = totalSeconds / 3600;
     const pay = +(hours * PAY_PER_HOUR).toFixed(2);
-    rows.push(`${date},${totalSeconds},${hours.toFixed(2)},${pay.toFixed(2)}`);
+    rows.push(`${date},${totalSeconds},${hours.toFixed(2)},${pay.toFixed(2)},`);
   }
 
   // Add total row
   const totalHours = grandTotalSeconds / 3600;
   const totalPay = +(totalHours * PAY_PER_HOUR).toFixed(2);
   rows.push(
-    `Total,${grandTotalSeconds},${totalHours.toFixed(2)},${totalPay.toFixed(2)}`,
+    `Total,${grandTotalSeconds},${totalHours.toFixed(2)},${totalPay.toFixed(2)},`,
   );
 
   // Save
   fs.writeFileSync(
     "./invoice_ai.csv",
-    `date,total_seconds,hours,pay\n${rows.join("\n")}`,
+    `date,total_seconds,hours,pay,reason\n${rows.join("\n")}`,
   );
   console.log("Saved to invoice.csv");
 })();
