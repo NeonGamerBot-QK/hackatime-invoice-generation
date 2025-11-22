@@ -27,12 +27,12 @@ EOF
 chmod +x ~/codespace_usage_logger.sh
 # 3. Add to .bashrc so it starts automatically (idempotent check)
 if ! grep -q "codespace_usage_logger.sh" ~/.bashrc; then
-    echo "" >> ~/.bashrc
-    echo "# Start Codespace Usage Logger in background" >> ~/.bashrc
-    echo "nohup ~/codespace_usage_logger.sh > /dev/null 2>&1 &" >> ~/.bashrc
-    echo "Logger installed successfully."
+  echo "" >> ~/.bashrc
+  echo "# Start Codespace Usage Logger in background" >> ~/.bashrc
+  echo "nohup ~/codespace_usage_logger.sh > /dev/null 2>&1 &" >> ~/.bashrc
+  echo "Logger installed successfully."
 else
-    echo "Logger is already installed."
+  echo "Logger is already installed."
 fi
 # 4. Start it immediately for this session
 nohup ~/codespace_usage_logger.sh > /dev/null 2>&1 &
