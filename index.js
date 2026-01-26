@@ -3,27 +3,19 @@ const fs = require("fs");
 // Constants
 const PAY_PER_HOUR = 13.5;
 const ACTIVE_THRESHOLD = 120; // seconds
-(async () => {
-  // Load heartbeats
-  const heartbeats = await fetch(
-    "https://hackatime.hackclub.com/api/admin/v1/execute",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.HACKATIME_ADMIN_KEY}`,
-        "Content-Type": "application/json",
-      },
-      // IF U HAVE MORE THEN 9999 WHY
-      body: JSON.stringify({
-        query: `select raw_data from heartbeats where user_id = ${process.env.HACKATIME_ID} AND project = '${process.env.HACKATIME_PROJECT}' LIMIT 99999;`,
-      }),
-    },
-  )
-    .then((r) => r.json())
-    .then((d) => {
-      // console.log(d)
-      return d.rows.map((e) => JSON.parse(e.raw_data[1]));
-    });
+
+/**
+ * Parses heartbeats from a local JSON file and generates an invoice CSV.
+ * Reads from heartbeats.json exported from Hackatime.
+ */
+(() => {
+  // Load heartbeats from local JSON file
+  const rawData = JSON.parse(fs.readFileSync("./heartbeats.json", "utf-8"));
+  const heartbeats = rawData.heartbeats.map((hb) => ({
+    ...hb,
+    // Convert ISO timestamp to Unix timestamp (seconds)
+    time: new Date(hb.time).getTime() / 1000,
+  }));
 
   // Group by date
   const grouped = {};
