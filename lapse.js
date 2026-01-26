@@ -20,7 +20,9 @@ async function fetchLapses() {
     if (process.env.LAPSE_COOKIES) {
       headers["Cookie"] = process.env.LAPSE_COOKIES;
     } else {
-      console.warn("⚠️  LAPSE_COOKIES not set - only public lapses will be fetched");
+      console.warn(
+        "⚠️  LAPSE_COOKIES not set - only public lapses will be fetched",
+      );
     }
 
     const response = await fetch(LAPSE_API_URL, { headers });
@@ -59,7 +61,9 @@ function generateInvoice(lapses) {
     return name.includes("ft") || name.includes("flavortown");
   });
 
-  console.log(`Filtered to ${filteredLapses.length} lapse(s) matching "ft" or "flavortown"`);
+  console.log(
+    `Filtered to ${filteredLapses.length} lapse(s) matching "ft" or "flavortown"`,
+  );
 
   // Group lapses by date using createdAt timestamp
   const grouped = {};
@@ -70,7 +74,7 @@ function generateInvoice(lapses) {
       grouped[date] = { totalSeconds: 0, projects: [], lapseUrls: [] };
     }
     grouped[date].totalSeconds += lapse.duration;
-    
+
     // Track project names for the reason column
     const project = lapse.private?.hackatimeProject || lapse.name;
     if (project && !grouped[date].projects.includes(project)) {
@@ -94,13 +98,17 @@ function generateInvoice(lapses) {
     const reason = projects.join("; ");
     const urls = lapseUrls.join(" ");
 
-    rows.push(`${date},${totalSeconds},${hours.toFixed(2)},${pay.toFixed(2)},${reason},${urls}`);
+    rows.push(
+      `${date},${totalSeconds},${hours.toFixed(2)},${pay.toFixed(2)},${reason},${urls}`,
+    );
   }
 
   // Add total row
   const totalHours = grandTotalSeconds / 3600;
   const totalPay = +(totalHours * PAY_PER_HOUR).toFixed(2);
-  rows.push(`Total,${grandTotalSeconds},${totalHours.toFixed(2)},${totalPay.toFixed(2)},,`);
+  rows.push(
+    `Total,${grandTotalSeconds},${totalHours.toFixed(2)},${totalPay.toFixed(2)},,`,
+  );
 
   return `date,total_seconds,hours,pay,reason,lapse_urls\n${rows.join("\n")}`;
 }
