@@ -3,11 +3,11 @@ const fs = require("fs");
 
 // Constants
 const LAPSE_USER_ID = process.env.LAPSE_USER_ID || "HuhRJDfr8XGO";
-const LAPSE_API_URL = `https://lapse.hackclub.com/api/trpc/timelapse.findByUser?input=%7B%22user%22%3A%22${LAPSE_USER_ID}%22%7D`;
+const LAPSE_API_URL = `https://api.lapse.hackclub.com/api/timelapse/findByUser?user=${LAPSE_USER_ID}`;
 
 /**
  * Fetches timelapses from the Lapse API.
- * Uses cookies from environment variable for private lapse access.
+ * Uses Bearer token from environment variable for private lapse access.
  * @returns {Promise<Array|null>} Array of timelapse objects or null on failure.
  */
 async function fetchLapses() {
@@ -16,12 +16,12 @@ async function fetchLapses() {
       "Content-Type": "application/json",
     };
 
-    // Add cookies for private lapse access if available
-    if (process.env.LAPSE_COOKIES) {
-      headers["Cookie"] = process.env.LAPSE_COOKIES;
+    // Add Bearer token for private lapse access if available
+    if (process.env.LAPSE_TOKEN) {
+      headers["Authorization"] = `Bearer ${process.env.LAPSE_TOKEN}`;
     } else {
       console.warn(
-        "⚠️  LAPSE_COOKIES not set - only public lapses will be fetched",
+        "⚠️  LAPSE_TOKEN not set - only public lapses will be fetched",
       );
     }
 
@@ -34,12 +34,12 @@ async function fetchLapses() {
 
     const data = await response.json();
 
-    if (!data.result?.data?.ok || !data.result?.data?.data?.timelapses) {
-      console.error("Invalid lapse API response structure");
+    if (!data.ok || !data.data?.timelapses) {
+      console.error("Invalid lapse API response:", data.error || data.message || "unknown error");
       return null;
     }
 
-    return data.result.data.data.timelapses;
+    return data.data.timelapses;
   } catch (err) {
     console.error("Failed to fetch lapses:", err);
     return null;
