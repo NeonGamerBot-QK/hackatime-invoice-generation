@@ -35,7 +35,10 @@ async function fetchLapses() {
     const data = await response.json();
 
     if (!data.ok || !data.data?.timelapses) {
-      console.error("Invalid lapse API response:", data.error || data.message || "unknown error");
+      console.error(
+        "Invalid lapse API response:",
+        data.error || data.message || "unknown error",
+      );
       return null;
     }
 
